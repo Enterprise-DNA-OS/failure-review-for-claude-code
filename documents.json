@@ -1,11 +1,40 @@
 [
   {
-    "name": "example",
-    "title": "TODO(author): the first document this industry must produce",
-    "for_each": "select gen_random_uuid() as id, 'Example' as name",
-    "file": "name",
+    "name": "fmea-paper",
+    "title": "Draft FMEA working paper",
+    "for_each": "select id,code from analyses order by code",
+    "file": "code",
     "sections": [
-      { "title": "Details", "sql": "select 'replace me' as item, $1::text as record_id" }
+      {
+        "title": "Analysis",
+        "layout": "record",
+        "sql": "select code,name,owner,method,rating_basis,review_due from analyses where id=$1"
+      },
+      {
+        "title": "Failure chains",
+        "sql": "select code,process_step,function_text,mode,effect,cause from failures where analysis_id=$1 order by code"
+      },
+      {
+        "title": "Ratings and review",
+        "note": "Recorded priorities require engineering review. No certification or process release.",
+        "sql": "select code,severity,occurrence,detection_rating,rpn,action_priority,priority_basis,revision,reviewed from failure_register where analysis_id=$1 order by code"
+      }
+    ]
+  },
+  {
+    "name": "control-plan",
+    "title": "Draft control plan and action register",
+    "for_each": "select id,code from analyses order by code",
+    "file": "code",
+    "sections": [
+      {
+        "title": "Control plan",
+        "sql": "select c.code,f.code failure,c.characteristic,c.method,c.frequency,c.reaction,c.owner,c.failure_revision,f.revision current_revision from controls c join failures f on f.id=c.failure_id where f.analysis_id=$1 order by c.code"
+      },
+      {
+        "title": "Actions",
+        "sql": "select ac.code,f.code failure,ac.description,ac.owner,ac.due,ac.status,ac.completion_evidence,ac.verification_evidence from actions ac join failures f on f.id=ac.failure_id where f.analysis_id=$1 order by ac.due,ac.code"
+      }
     ]
   }
 ]

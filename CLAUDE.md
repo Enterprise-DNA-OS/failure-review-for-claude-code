@@ -1,43 +1,60 @@
-# Failure Review for Claude Code: operating instructions
+# Failure Review for Claude Code
 
-This file is the brain. Claude Code reads it at the start of every session. It says who this is for, how work gets done, and the one right way to do each recurring job.
+For a quality team maintaining failure analyses, corrective actions and review evidence. Ask the operator for their business and role when needed.
 
-## Who this is for
+Read docs/cli.md and the matching .claude/commands recipe. Every answer about records starts with the CLI. Read the full record before writing. Use named actors and real evidence. Never invent ratings, priorities, due dates, reviews or completion.
 
-- **Business:** [YOUR BUSINESS]
-- **Operator:** [YOUR NAME], [your role]
-- **What matters most:** [the one or two outcomes you care about]
+## Rules
 
-Fill this in once. A worker with context knows. A worker without it guesses.
+- No sending, process release, safety certification or deletion. Draft locally.
+- Review records against the team's licensed methodology and customer requirements. Compliance checks are record checks only.
+- Source imports and notes are immutable. Correct by adding evidence or revising a failure with a reason.
+- Any failure edit invalidates its review and control links.
+- A different named reviewer verifies a completed action. Names are audit labels, not authenticated identity.
+- Never seed a live database. Back up and test recovery before shared use.
+- Put private workbooks, exports and credentials outside Git.
+- DATABASE_URL uses Postgres; otherwise .data/db uses PGlite. One database, one trusted operator connection.
 
-## How to work
+## Routing
 
-1. **Take a brief, not a script.** The operator describes the outcome. You run the right command and present the answer.
-2. **Read before you write.** Before drafting anything about a record, read its full history first.
-3. **Plain language.** Short sentences. No filler. Numbers in tables.
-4. **Silent success, loud problems.** No play-by-play. Say what broke and what you did about it.
-5. **Stop at the line.** Anything that sends, deletes, or faces a customer waits for a yes in this session.
-
-## Routing table: one right way for each recurring job
-
-| When the operator asks for... | Use this |
+| Job | Recipe |
 |---|---|
-| <!-- TODO(author): one row per slash command --> | `/...` |
+| analyses | /analyses |
+| worksheet | /worksheet |
+| risk-review | /risk-review |
+| actions-due | /actions-due |
+| high-severity | /high-severity |
+| unreviewed | /unreviewed |
+| control-gaps | /control-gaps |
+| stale-analyses | /stale-analyses |
+| owner-workload | /owner-workload |
+| recurring-causes | /recurring-causes |
+| rating-gaps | /rating-gaps |
+| compliance | /compliance |
+| attention | /attention |
+| notes | /notes |
+| audit | /audit |
+| imports | /imports |
+| controls | /controls |
+| reviews | /reviews |
+| analysis | /analysis |
+| failure | /failure |
+| add-analysis | /add-analysis |
+| add-failure | /add-failure |
+| revise-failure | /revise-failure |
+| add-action | /add-action |
+| complete-action | /complete-action |
+| verify-action | /verify-action |
+| add-control | /add-control |
+| review-failure | /review-failure |
+| log | /log |
+| set-review-date | /set-review-date |
+| import | /import |
+| weekly-review | /weekly-review |
+| draft-fmea | /draft-fmea |
+| draft-action-register | /draft-action-register |
+| export | /export |
+| customise | /customise |
+| new-view | /new-view |
 
-If an ask fits nothing here, run the CLI directly (`npm run <cli> -- --help`) and then propose a new command for it.
-
-## Hard rules
-
-- Never send email or messages from here. Draft to `drafts/`, a person sends.
-- Never delete records without an explicit yes in this session. Prefer marking closed or archived.
-- Never invent a record. If a name is ambiguous, list the candidates and ask.
-- The database is the source of truth. If the answer is not in it, say so.
-
-## Where things live
-
-- `scripts/` the CLI. `scripts/lib/db.mjs` picks `DATABASE_URL` (Postgres, Supabase) or the embedded database in `.data/`.
-- `supabase/migrations/` the schema, plain SQL. `npm run migrate` applies it.
-- `.claude/commands/` the slash commands. Add one every time the same ask comes twice.
-- `docs/` the thesis and the guide for moving off PQ-FMEA+.
-
-Built by Enterprise DNA. Installed and run for you as part of Omni: https://enterprisedna.co/omni/instead-of/pq-fmea
+Run npm run review -- help for the command list. The one CLI is scripts/review.mjs. Schema lives in supabase/migrations, documents in documents.json, views in views.json, brand in brand.json.

@@ -1,13 +1,30 @@
 [
   {
     "name": "week",
-    "title": "This week",
-    "subtitle": "Failure Review for Claude Code: what needs attention, rendered by npm run view",
+    "title": "Weekly failure review",
+    "subtitle": "Fictional demo when seeded. Read-only snapshot.",
     "sections": [
       {
-        "title": "Needs attention",
-        "note": "TODO(author): point this at the industry's attention view (overdue, stuck, quiet).",
-        "sql": "select 'replace me' as item, 'TODO(author)' as why"
+        "title": "Engineering round",
+        "sql": "select code,analysis_code,mode,severity,action_priority,reviewed,open_actions,current_controls from failure_register order by code"
+      },
+      {
+        "title": "Outstanding actions",
+        "sql": "select code,failure,owner,due,status,overdue from action_register where status<>'verified' order by due,code"
+      },
+      {
+        "title": "Record checks",
+        "sql": "select * from review_findings order by rule,code"
+      }
+    ]
+  },
+  {
+    "name": "control-plan",
+    "title": "Control-plan revision links",
+    "sections": [
+      {
+        "title": "Controls",
+        "sql": "select c.code,f.code failure,c.characteristic,c.method,c.frequency,c.reaction,c.failure_revision,f.revision current_revision from controls c join failures f on f.id=c.failure_id order by c.code"
       }
     ]
   }

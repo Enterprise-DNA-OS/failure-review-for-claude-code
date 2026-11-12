@@ -1,0 +1,19 @@
+{
+  "sheet": "FMEA",
+  "start_row": 4,
+  "end_row": 5,
+  "columns": {
+    "process_step": 1,
+    "function_text": 2,
+    "mode": 3,
+    "effect": 4,
+    "cause": 5,
+    "prevention": 6,
+    "detection": 7,
+    "severity": 8,
+    "occurrence": 9,
+    "detection_rating": 10,
+    "action_priority": 11,
+    "priority_basis": 12
+  }
+}
